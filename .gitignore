@@ -1,0 +1,25 @@
+# Environment and virtual environment
+.env
+.venv/
+__pycache__/
+*.pyc
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and cache
+*.log
+*.sqlite3
+*.db
+*.cache/
+*.egg-info/
+
+# Test artifacts
+.coverage
+htmlcov/
+pytest_cache/
+
+
