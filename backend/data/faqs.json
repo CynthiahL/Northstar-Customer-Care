@@ -1,0 +1,74 @@
+[
+  {
+    "faq_id": "FAQ-001",
+    "category": "orders",
+    "question": "How can I check my order status?",
+    "answer": "You can check your order status by providing your order number. We will show you the latest available status and estimated delivery date."
+  },
+  {
+    "faq_id": "FAQ-002",
+    "category": "orders",
+    "question": "Where can I find my order number?",
+    "answer": "Your order number can be found in your order confirmation email or receipt. It usually starts with ORD-."
+  },
+  {
+    "faq_id": "FAQ-003",
+    "category": "orders",
+    "question": "What do the different order statuses mean?",
+    "answer": "Processing means your order is being prepared. Shipped means it has been dispatched. Delivered means it has reached the delivery destination. Delayed means delivery is taking longer than expected."
+  },
+  {
+    "faq_id": "FAQ-004",
+    "category": "shipping",
+    "question": "When will my order arrive?",
+    "answer": "Your estimated delivery date is provided when you check your order status. Delivery times may vary depending on your location and the delivery provider."
+  },
+  {
+    "faq_id": "FAQ-005",
+    "category": "returns",
+    "question": "How do I return an item?",
+    "answer": "To start a return, provide your order number. We will check whether the order is eligible and then provide the next steps."
+  },
+  {
+    "faq_id": "FAQ-006",
+    "category": "returns",
+    "question": "How long do I have to return an item?",
+    "answer": "Eligible items can be returned within the applicable return window. Please provide your order number so we can check the eligibility of your specific order."
+  },
+  {
+    "faq_id": "FAQ-007",
+    "category": "returns",
+    "question": "What happens after I request a return?",
+    "answer": "Once your return is approved, you will receive instructions on how to return the item. Further processing depends on the condition of the returned item and the applicable return policy."
+  },
+  {
+    "faq_id": "FAQ-008",
+    "category": "refunds",
+    "question": "How can I check my refund status?",
+    "answer": "Provide your order number and we can check whether your refund is pending, processing, or completed."
+  },
+  {
+    "faq_id": "FAQ-009",
+    "category": "refunds",
+    "question": "When will I receive my refund?",
+    "answer": "Refund processing time can vary depending on the payment method and financial institution. You can provide your order number to check the current refund status."
+  },
+  {
+    "faq_id": "FAQ-010",
+    "category": "support",
+    "question": "Can I speak to a human support agent?",
+    "answer": "Yes. If the chatbot cannot resolve your request or you prefer human assistance, you can request escalation to a support agent."
+  },
+  {
+    "faq_id": "FAQ-011",
+    "category": "support",
+    "question": "What can the chatbot help me with?",
+    "answer": "The chatbot can currently help with order status, returns, refunds, and common customer support questions."
+  },
+  {
+    "faq_id": "FAQ-012",
+    "category": "support",
+    "question": "What if the chatbot cannot answer my question?",
+    "answer": "If your question cannot be resolved automatically, you can request human support and your conversation can be escalated."
+  }
+]

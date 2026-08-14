@@ -1,0 +1,212 @@
+[
+  {
+    "order_id": "ORD-10001",
+    "customer_id": "CUS-001",
+    "customer_name": "Amina",
+    "email": "amina@example.com",
+    "order_date": "2026-08-01",
+    "delivery_date": "2026-08-05",
+    "status": "delivered",
+    "estimated_delivery": "2026-08-05",
+    "items": [
+      {
+        "product_id": "SKU-1001",
+        "product_name": "Classic Denim Jacket",
+        "variant": "Size M, Blue",
+        "quantity": 1,
+        "price": 4500
+      }
+    ],
+    "return_eligible": true,
+    "refund_status": "not_requested"
+  },
+  {
+    "order_id": "ORD-10002",
+    "customer_id": "CUS-002",
+    "customer_name": "Brian",
+    "email": "brian@example.com",
+    "order_date": "2026-08-08",
+    "delivery_date": null,
+    "status": "shipped",
+    "estimated_delivery": "2026-08-15",
+    "items": [
+      {
+        "product_id": "SKU-1002",
+        "product_name": "Everyday Sneakers",
+        "variant": "Size 42, White",
+        "quantity": 1,
+        "price": 6500
+      }
+    ],
+    "return_eligible": false,
+    "refund_status": "not_requested"
+  },
+  {
+    "order_id": "ORD-10003",
+    "customer_id": "CUS-003",
+    "customer_name": "Cynthia",
+    "email": "cynthia@example.com",
+    "order_date": "2026-08-10",
+    "delivery_date": null,
+    "status": "processing",
+    "estimated_delivery": "2026-08-17",
+    "items": [
+      {
+        "product_id": "SKU-1003",
+        "product_name": "Linen Shirt",
+        "variant": "Size L, White",
+        "quantity": 1,
+        "price": 3200
+      }
+    ],
+    "return_eligible": false,
+    "refund_status": "not_requested"
+  },
+  {
+    "order_id": "ORD-10004",
+    "customer_id": "CUS-004",
+    "customer_name": "Daniel",
+    "email": "daniel@example.com",
+    "order_date": "2026-07-28",
+    "delivery_date": "2026-08-01",
+    "status": "delivered",
+    "estimated_delivery": "2026-08-01",
+    "items": [
+      {
+        "product_id": "SKU-1004",
+        "product_name": "Canvas Backpack",
+        "variant": "Black",
+        "quantity": 1,
+        "price": 3800
+      }
+    ],
+    "return_eligible": true,
+    "refund_status": "not_requested"
+  },
+  {
+    "order_id": "ORD-10005",
+    "customer_id": "CUS-005",
+    "customer_name": "Esther",
+    "email": "esther@example.com",
+    "order_date": "2026-07-10",
+    "delivery_date": "2026-07-15",
+    "status": "delivered",
+    "estimated_delivery": "2026-07-15",
+    "items": [
+      {
+        "product_id": "SKU-1005",
+        "product_name": "Cotton Dress",
+        "variant": "Size M, Green",
+        "quantity": 1,
+        "price": 5200
+      }
+    ],
+    "return_eligible": false,
+    "refund_status": "not_requested"
+  },
+  {
+    "order_id": "ORD-10006",
+    "customer_id": "CUS-006",
+    "customer_name": "Faith",
+    "email": "faith@example.com",
+    "order_date": "2026-07-25",
+    "delivery_date": "2026-07-30",
+    "status": "delivered",
+    "estimated_delivery": "2026-07-30",
+    "items": [
+      {
+        "product_id": "SKU-1006",
+        "product_name": "Leather Handbag",
+        "variant": "Brown",
+        "quantity": 1,
+        "price": 7200
+      }
+    ],
+    "return_eligible": true,
+    "refund_status": "processing"
+  },
+  {
+    "order_id": "ORD-10007",
+    "customer_id": "CUS-007",
+    "customer_name": "Grace",
+    "email": "grace@example.com",
+    "order_date": "2026-07-20",
+    "delivery_date": "2026-07-25",
+    "status": "delivered",
+    "estimated_delivery": "2026-07-25",
+    "items": [
+      {
+        "product_id": "SKU-1007",
+        "product_name": "Running Shoes",
+        "variant": "Size 39, Black",
+        "quantity": 1,
+        "price": 5800
+      }
+    ],
+    "return_eligible": true,
+    "refund_status": "completed"
+  },
+  {
+    "order_id": "ORD-10008",
+    "customer_id": "CUS-008",
+    "customer_name": "Hassan",
+    "email": "hassan@example.com",
+    "order_date": "2026-08-03",
+    "delivery_date": null,
+    "status": "delayed",
+    "estimated_delivery": "2026-08-18",
+    "items": [
+      {
+        "product_id": "SKU-1008",
+        "product_name": "Hoodie",
+        "variant": "Size XL, Grey",
+        "quantity": 1,
+        "price": 4100
+      }
+    ],
+    "return_eligible": false,
+    "refund_status": "not_requested"
+  },
+  {
+    "order_id": "ORD-10009",
+    "customer_id": "CUS-009",
+    "customer_name": "Irene",
+    "email": "irene@example.com",
+    "order_date": "2026-08-05",
+    "delivery_date": null,
+    "status": "cancelled",
+    "estimated_delivery": null,
+    "items": [
+      {
+        "product_id": "SKU-1009",
+        "product_name": "Classic T-Shirt",
+        "variant": "Size S, Black",
+        "quantity": 2,
+        "price": 1800
+      }
+    ],
+    "return_eligible": false,
+    "refund_status": "completed"
+  },
+  {
+    "order_id": "ORD-10010",
+    "customer_id": "CUS-010",
+    "customer_name": "John",
+    "email": "john@example.com",
+    "order_date": "2026-08-07",
+    "delivery_date": "2026-08-11",
+    "status": "delivered",
+    "estimated_delivery": "2026-08-11",
+    "items": [
+      {
+        "product_id": "SKU-1010",
+        "product_name": "Casual Trousers",
+        "variant": "Size 34, Navy",
+        "quantity": 1,
+        "price": 3900
+      }
+    ],
+    "return_eligible": true,
+    "refund_status": "not_requested"
+  }
+]
