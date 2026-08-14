@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import {
+  sendChatMessage,
+  type ChatResponse,
+} from "../../lib/api";
 
 type ItemType = "clothing" | "electronics" | "home" | "other" | null;
 
@@ -27,6 +31,13 @@ export default function ReturnItemFlow({
   const [deliveryDate, setDeliveryDate] = useState("");
   const [condition, setCondition] = useState<ItemCondition>(null);
   const [eligible, setEligible] = useState<boolean | null>(null);
+  const [returnResponse, setReturnResponse] =
+  useState<ChatResponse | null>(null);
+
+  const [returnLoading, setReturnLoading] = useState(false);
+
+  const [returnError, setReturnError] =
+  useState<string | null>(null);
 
   function handleCheckEligibility() {
     const isEscalationCase =
@@ -44,6 +55,35 @@ export default function ReturnItemFlow({
     setEligible(null);
   }
 
+  async function handleStartReturn() {
+    if (returnLoading) {
+        return;
+    }
+
+    setReturnLoading(true);
+    setReturnError(null);
+    setReturnResponse(null);
+
+    try {
+      const response = await sendChatMessage({
+        message: "I want to return my item",
+        order_id: "ORD-12345",
+        state: "new",
+      });
+
+      setReturnResponse(response);
+    } catch (error) {
+      console.error("Return request failed:", error);
+
+      setReturnError(
+        error instanceof Error
+          ? error.message
+          : "Unable to start the return process.",
+      );
+    } finally {
+      setReturnLoading(false);
+    }
+  }  
   return (
     <div>
       {/* Header */}
@@ -272,10 +312,31 @@ export default function ReturnItemFlow({
 
               <button
                 type="button"
-                className="mt-6 w-full rounded-xl bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--primary-dark)]"
+                onClick={handleStartReturn}
+                disabled={returnLoading}
+                className="mt-6 w-full rounded-xl bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--primary-dark)] disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Start return
+                {returnLoading ? "Starting return..." : "Start return"}
               </button>
+              {returnError && (
+                <div className="mt-4 rounded-xl border border-red-100 bg-red-50 p-4">
+                  <p className="text-sm leading-6 text-red-900">
+                    {returnError}
+                  </p>
+                </div>
+              )}
+
+              {returnResponse && (
+                <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4">
+                  <p className="text-xs font-medium uppercase tracking-wide text-[var(--muted)]">
+                    Northstar Support
+                  </p>
+
+                  <p className="mt-2 text-sm leading-6 text-[var(--foreground)]">
+                    {returnResponse.message}
+                  </p>
+                </div>
+              )}
             </>
           ) : (
             <>

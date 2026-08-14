@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 import ReturnItemFlow from "../components/returns/ReturnItemFlow";
+import {
+  sendChatMessage,
+  type ChatResponse,
+} from "../lib/api";
 
 type Intent = "order" | "returns" | "other" | null;
 
@@ -17,6 +21,16 @@ export default function Home() {
   const [returnsOption, setReturnsOption] = useState<ReturnsOption>(null);
   const [message, setMessage] = useState("");
 
+  const [chatResponse, setChatResponse] = useState<ChatResponse | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [chatError, setChatError] = useState<string | null>(null);
+
+  const [refundOrderId, setRefundOrderId] = useState("");
+  const [refundResponse, setRefundResponse] =
+  useState<ChatResponse | null>(null);
+  const [refundLoading, setRefundLoading] = useState(false);
+  const [refundError, setRefundError] = useState<string | null>(null);
+
   function handleIntent(intent: Exclude<Intent, null>) {
     setSelectedIntent(intent);
     setReturnsOption(null);
@@ -30,17 +44,74 @@ export default function Home() {
   function handleReturnsOption(option: Exclude<ReturnsOption, null>) {
     setReturnsOption(option);
   }
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  
+  async function handleRefundCheck(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
-    if (!message.trim()) {
+    const orderId = refundOrderId.trim();
+
+    if (!orderId || refundLoading) {
       return;
     }
 
-    console.log("Customer message:", message);
+    setRefundLoading(true);
+    setRefundError(null);
+    setRefundResponse(null);
 
-    setMessage("");
+    try {
+      const response = await sendChatMessage({
+        message: "Where is my refund?",
+        order_id: orderId,
+        state: "new",
+      });
+
+      setRefundResponse(response);
+    } catch (error) {
+      console.error("Refund request failed:", error);
+
+      setRefundError(
+        error instanceof Error
+          ? error.message
+          : "Unable to check your refund status.",
+      );
+    } finally {
+      setRefundLoading(false);
+    }
+  }
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const trimmedMessage = message.trim();
+
+    if (!trimmedMessage || isSending) {
+      return;
+    }
+
+    setIsSending(true);
+    setChatError(null);
+    setChatResponse(null);
+
+    try {
+      const response = await sendChatMessage({
+        message: trimmedMessage,
+        state: "new",
+      });
+
+      setChatResponse(response);
+      setMessage("");
+    } catch (error) {
+      console.error("Chat request failed:", error);
+
+      setChatError(
+        error instanceof Error
+          ? error.message
+          : "Unable to contact customer support.",
+      );
+    } finally {
+      setIsSending(false);
+    }
   }
 
   return (
@@ -301,6 +372,52 @@ export default function Home() {
                           Enter your order number to check whether your return
                           has been received, accepted or refunded.
                         </p>
+
+                        <form
+                          onSubmit={handleRefundCheck}
+                          className="mt-4"
+                        >
+                          <div className="flex flex-col gap-3 sm:flex-row">
+                            <input
+                              type="text"
+                              value={refundOrderId}
+                              onChange={(event) =>
+                                setRefundOrderId(event.target.value)
+                              }
+                              placeholder="e.g. ORD-12345"
+                              aria-label="Order number for refund"
+                              className="flex-1 rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
+                            />
+
+                            <button
+                              type="submit"
+                              disabled={!refundOrderId.trim() || refundLoading}
+                              className="rounded-xl bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--primary-dark)] disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                              {refundLoading ? "Checking..." : "Check refund"}
+                            </button>
+                          </div>
+                        </form>
+
+                        {refundError && (
+                          <div className="mt-4 rounded-xl border border-red-100 bg-red-50 p-4">
+                            <p className="text-sm leading-6 text-red-900">
+                              {refundError}
+                            </p>
+                          </div>
+                        )}
+
+                        {refundResponse && (
+                          <div className="mt-4 rounded-xl border border-blue-100 bg-white p-4">
+                            <p className="text-xs font-medium uppercase tracking-wide text-[var(--muted)]">
+                              Northstar Support
+                            </p>
+
+                            <p className="mt-2 text-sm leading-6 text-[var(--foreground)]">
+                              {refundResponse.message}
+                            </p>
+                          </div>
+                        )}
                       </>
                     )}
 
@@ -458,6 +575,31 @@ export default function Home() {
                     </button>
                   </div>
                 </form>
+                {isSending && (
+                  <p className="mt-3 text-sm text-[var(--muted)]">
+                    Checking with Northstar Support...
+                  </p>
+                )}
+
+                {chatError && (
+                  <div className="mt-4 rounded-2xl border border-red-100 bg-red-50 p-4">
+                    <p className="text-sm leading-6 text-red-900">
+                      {chatError}
+                    </p>
+                  </div>
+                )}
+
+                {chatResponse && (
+                  <div className="mt-4 rounded-2xl border border-[var(--border)] bg-white p-5 shadow-sm">
+                    <p className="text-xs font-medium uppercase tracking-wide text-[var(--muted)]">
+                      Northstar Support
+                    </p>
+
+                    <p className="mt-2 text-sm leading-7 text-[var(--foreground)]">
+                      {chatResponse.message}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>
