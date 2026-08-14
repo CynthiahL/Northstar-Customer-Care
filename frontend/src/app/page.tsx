@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ReturnItemFlow from "../components/returns/ReturnItemFlow";
 
 type Intent = "order" | "returns" | "other" | null;
 
@@ -284,17 +285,10 @@ export default function Home() {
                 {returnsOption && (
                   <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-5">
                     {returnsOption === "return-item" && (
-                      <>
-                        <h3 className="font-semibold text-blue-950">
-                          Return an item
-                        </h3>
-
-                        <p className="mt-2 text-sm leading-6 text-blue-900">
-                          We&apos;ll check the item type, purchase date and
-                          condition to determine whether it qualifies for a
-                          return.
-                        </p>
-                      </>
+                      <ReturnItemFlow
+                        onBack={() => setReturnsOption(null)}
+                        onHumanSupport={() => setReturnsOption("human")}
+                      />
                     )}
 
                     {returnsOption === "refund" && (
