@@ -1,0 +1,27 @@
+[
+  {
+    "rawQuestion": "where is my order",
+    "intent": "order_status",
+    "flow": "order_status_flow"
+  },
+  {
+    "rawQuestion": "has this shipped yet",
+    "intent": "order_status",
+    "flow": "order_status_flow"
+  },
+  {
+    "rawQuestion": "track my package",
+    "intent": "order_status",
+    "flow": "order_status_flow"
+  },
+  {
+    "rawQuestion": "What is the status of my order?",
+    "intent": "order_status",
+    "flow": "order_status_flow"
+  },
+  {
+    "rawQuestion": "When will my package arrive?",
+    "intent": "order_status",
+    "flow": "order_status_flow"
+  }
+]
