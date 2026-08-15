@@ -19,7 +19,7 @@ ORDERS_FILE = Path(__file__).resolve().parent.parent / "data" / "orders.json"
 def _load_orders():
     with ORDERS_FILE.open("r", encoding="utf-8") as file:
         orders = json.load(file)
-    return {order["orderId"]: order for order in orders}
+    return {order["order_id"]: order for order in orders}
 
 ORDER_INDEX = _load_orders()
 
@@ -62,4 +62,4 @@ def get_order_status(order_number: str) -> ChatResponse:
     # Success
     return ChatResponse(intent=Intent.ORDER_STATUS,
                         state=ConversationState.SUCCESS,
-                        message=f"Order {order['orderId']} is {order['status']} with delivery date {order.get('deliveryDate')}.")
+                        message=f"Order {order['order_id']} is {order['status']} with delivery date {order.get('delivery_date')}.")
