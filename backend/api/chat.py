@@ -77,10 +77,15 @@ def chat(request: ChatRequest) -> ChatResponse:
 
     classification = classify_message(request.message)
 
-    intent = classification.intent
-
-    # Prefer an order ID found in the current message.
-    # If none was found, use the ID supplied with the request.
+    # Continue the previous conversation when the frontend
+    # sends the conversation state and intent.
+    if (
+        request.state == ConversationState.AWAITING_ORDER_ID
+        and request.intent is not None
+    ):
+        intent = request.intent
+    else:
+        intent = classification.intent
     order_id = classification.order_id or request.order_id
 
     # -----------------------------------------------------
