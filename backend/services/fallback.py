@@ -1,17 +1,18 @@
+from backend.api.schemas.chat import ChatResponse
+from backend.intents.definitions import Intent, ConversationState
+from backend.services.escalation import escalate_to_human
 
+# Dynamic fallback message string waiting for a real ticket ID insertion
 FALLBACK_MESSAGE = (
     "I'm not able to help with that specific request yet. I've logged it "
     "for our support team, and you can also ask to speak with a person at "
     "any time. Reference ticket: {ticket_id}"
 )
 
-from backend.api.schemas.chat import ChatResponse
-from backend.intents.definitions import Intent, ConversationState
-from backend.services.escalation import escalate_to_human
-
 
 def handle_unmatched_query(customer_id: str, message: str) -> ChatResponse:
-    """Handle a customer message that no other flow could resolve.
+    """
+    Handle a customer message that no other flow could resolve.
 
     This routes the request through the same human escalation path used
     for explicit human requests, so every unresolved query, whether the
@@ -26,11 +27,13 @@ def handle_unmatched_query(customer_id: str, message: str) -> ChatResponse:
         A fallback message shown to the customer, including a ticket
         reference.
     """
+    # Trigger the downstream human escalation & ticket creation logic
     escalation_response = escalate_to_human(
         customer_id=customer_id,
         source_flow="fallback",
         message=message,
     )
+    
     # Reuse the ticket id embedded in the escalation confirmation rather
     # than creating a second ticket for the same request.
     return ChatResponse(

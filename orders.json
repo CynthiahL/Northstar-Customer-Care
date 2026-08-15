@@ -1,0 +1,50 @@
+[
+  {
+    "orderId": "ORD1001",
+    "status": "Processing",
+    "deliveryDate": "2026-06-27",
+    "carrier": "USPS"
+  },
+  {
+    "orderId": "ORD1002",
+    "status": "Shipped",
+    "deliveryDate": "2026-06-25",
+    "carrier": "UPS"
+  },
+  {
+    "orderId": "ORD1003",
+    "status": "Out for Delivery",
+    "deliveryDate": "2026-06-22",
+    "carrier": "FedEx"
+  },
+  {
+    "orderId": "ORD1004",
+    "status": "Delivered",
+    "deliveryDate": "2026-06-20",
+    "carrier": "USPS"
+  },
+  {
+    "orderId": "ORD1005",
+    "status": "Cancelled",
+    "deliveryDate": null,
+    "carrier": null
+  },
+  {
+    "orderId": "ORD1006",
+    "status": "Shipped",
+    "deliveryDate": "2026-06-26",
+    "carrier": "DHL"
+  },
+  {
+    "orderId": "ORD1007",
+    "status": "Out for Delivery",
+    "deliveryDate": "2026-06-22",
+    "carrier": "UPS"
+  },
+  {
+    "orderId": "ORD1008",
+    "status": "Delivered",
+    "deliveryDate": "2026-06-19",
+    "carrier": "FedEx"
+  }
+]
