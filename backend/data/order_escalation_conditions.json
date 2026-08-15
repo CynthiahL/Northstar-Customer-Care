@@ -1,0 +1,131 @@
+{
+  "module": "Order Status",
+  "ticket": 7,
+  "branch": "feature/order",
+  "purpose": "Document conditions under which the order-status flow should hand off to a human agent.",
+  "implementationNote": "This is documentation only. Member 4 owns the actual escalation mechanism.",
+  "assumedInputs": [
+    "Raw customer message",
+    "Result of get_order_status(order_number) from Ticket #6",
+    "Conversation/session state, including failed attempt counts"
+  ],
+  "escalationConditions": [
+    {
+      "conditionId": "EXPLICIT_HUMAN_REQUEST",
+      "name": "Customer explicitly asks for a human",
+      "trigger": "Customer explicitly requests a human, person, agent, representative, live support, callback, or similar human assistance.",
+      "action": "Escalate immediately.",
+      "priority": "highest",
+      "overridesOtherConditions": true,
+      "examples": [
+        "I want to talk to a human.",
+        "Can I speak to a person?",
+        "Agent please.",
+        "Give me a representative.",
+        "I need live support.",
+        "Can someone call me back?"
+      ]
+    },
+    {
+      "conditionId": "REPEAT_ORDER_NOT_FOUND",
+      "name": "Repeated order-not-found after correctly formatted order IDs",
+      "trigger": "The customer receives the exact not-found fallback for two consecutive correctly formatted order IDs in the same session.",
+      "fallbackMessage": "We couldn't find that order.",
+      "threshold": 2,
+      "countOnlyWhen": [
+        "Order ID matches ^ORD\\d{4}$",
+        "get_order_status returns success=false",
+        "get_order_status returns message='We couldn't find that order.'"
+      ],
+      "resetConditions": [
+        "A valid order is found.",
+        "The customer starts a new session.",
+        "The customer explicitly asks for a human."
+      ],
+      "action": "Escalate when consecutive_not_found_count >= 2."
+    },
+    {
+      "conditionId": "REPEAT_INVALID_ORDER_INPUT",
+      "name": "Repeated failure to provide a valid order number",
+      "trigger": "The customer produces three consecutive empty or malformed order-number attempts in the same session.",
+      "fallbackMessages": [
+        "Please enter an order number.",
+        "That doesn't look like a valid order ID."
+      ],
+      "threshold": 3,
+      "countOnlyWhen": [
+        "get_order_status returns success=false",
+        "get_order_status returns message='Please enter an order number.'",
+        "get_order_status returns message='That doesn't look like a valid order ID.'"
+      ],
+      "resetConditions": [
+        "The customer submits a correctly formatted order ID.",
+        "The customer starts a new session.",
+        "The customer explicitly asks for a human."
+      ],
+      "action": "Escalate when consecutive_invalid_order_input_count >= 3."
+    },
+    {
+      "conditionId": "ORDER_DATA_ANOMALY",
+      "name": "Order data looks anomalous or inconsistent",
+      "trigger": "A found order violates the expected Order Status data rules.",
+      "anomalyRules": [
+        {
+          "ruleId": "INVALID_STATUS_VALUE",
+          "condition": "status is not one of: Processing, Shipped, Out for Delivery, Delivered, Cancelled"
+        },
+        {
+          "ruleId": "MISSING_DELIVERY_DATE_FOR_ACTIVE_DELIVERY_STATE",
+          "condition": "status is Shipped, Out for Delivery, or Delivered, but deliveryDate is missing, null, empty, or not a valid YYYY-MM-DD date"
+        },
+        {
+          "ruleId": "MISSING_CARRIER_FOR_ACTIVE_DELIVERY_STATE",
+          "condition": "status is Shipped, Out for Delivery, or Delivered, but carrier is missing, null, or empty"
+        },
+        {
+          "ruleId": "DELIVERED_DATE_IN_FUTURE",
+          "condition": "status is Delivered, but deliveryDate is later than the current date"
+        },
+        {
+          "ruleId": "ORDER_ID_MISMATCH",
+          "condition": "requested order ID does not match returned orderId"
+        }
+      ],
+      "action": "Escalate if any anomaly rule is true."
+    },
+    {
+      "conditionId": "DELAYED_OR_STUCK_ORDER",
+      "name": "Order appears delayed or stuck",
+      "trigger": "An order is in a non-terminal status but is past its expected delivery date.",
+      "nonTerminalStatuses": [
+        "Processing",
+        "Shipped",
+        "Out for Delivery"
+      ],
+      "terminalStatuses": [
+        "Delivered",
+        "Cancelled"
+      ],
+      "rule": "Escalate when status is Processing, Shipped, or Out for Delivery, deliveryDate is valid, and current date is after deliveryDate.",
+      "dateComparison": "Compare YYYY-MM-DD calendar dates only.",
+      "action": "Escalate when currentDate > deliveryDate for a non-terminal status."
+    }
+  ],
+  "nonEscalationRules": [
+    {
+      "ruleId": "NORMAL_SUCCESSFUL_LOOKUP",
+      "condition": "Order is found successfully and no anomaly rule is true.",
+      "action": "Do not escalate."
+    },
+    {
+      "ruleId": "CANCELLED_ORDER_ALONE",
+      "condition": "Order status is Cancelled and no other escalation condition applies.",
+      "action": "Do not escalate."
+    },
+    {
+      "ruleId": "DELIVERED_ORDER_ALONE",
+      "condition": "Order status is Delivered and no other escalation condition applies.",
+      "action": "Do not escalate."
+    }
+  ]
+}

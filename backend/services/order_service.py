@@ -31,35 +31,29 @@ def _is_valid_date(date_str: str) -> bool:
     except Exception:
         return False
 
-def get_order_status(order_number: str) -> ChatResponse:
-    # Empty input
+def get_order_status(order_number: str) -> str:
+    """
+    Business logic layer for looking up order tracking milestones.
+    Returns a raw message string describing the lookup result.
+    """
+    # 1. Empty input validation
     if order_number is None or (isinstance(order_number, str) and order_number.strip() == ""):
-        return ChatResponse(intent=Intent.ORDER_STATUS,
-                            state=ConversationState.PROCESSING,
-                            message=EMPTY_INPUT_MESSAGE)
+        return "Please enter an order number."
 
-    # Non-string input
+    # 2. Non-string input validation
     if not isinstance(order_number, str):
-        return ChatResponse(intent=Intent.ORDER_STATUS,
-                            state=ConversationState.PROCESSING,
-                            message=MALFORMED_ID_MESSAGE)
+        return "That doesn't look like a valid order ID."
 
     cleaned_order_id = order_number.strip()
 
-    # Invalid format
+    # 3. Structural regex pattern validation
     if not ORDER_ID_REGEX.fullmatch(cleaned_order_id):
-        return ChatResponse(intent=Intent.ORDER_STATUS,
-                            state=ConversationState.PROCESSING,
-                            message=MALFORMED_ID_MESSAGE)
+        return "That doesn't look like a valid order ID."
 
-    # Lookup
+    # 4. Database index lookup
     order = ORDER_INDEX.get(cleaned_order_id)
     if order is None:
-        return ChatResponse(intent=Intent.ORDER_STATUS,
-                            state=ConversationState.PROCESSING,
-                            message=NOT_FOUND_MESSAGE)
+        return "We couldn't find that order."
 
-    # Success
-    return ChatResponse(intent=Intent.ORDER_STATUS,
-                        state=ConversationState.SUCCESS,
-                        message=f"Order {order['order_id']} is {order['status']} with delivery date {order.get('delivery_date')}.")
+    # 5. Success execution path
+    return f"Order {order['orderId']} is {order['status']} with delivery date {order.get('deliveryDate', 'unspecified')}."
