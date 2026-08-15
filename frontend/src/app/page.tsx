@@ -598,6 +598,33 @@ export default function Home() {
                     <p className="mt-2 text-sm leading-7 text-[var(--foreground)]">
                       {chatResponse.message}
                     </p>
+
+                    {chatResponse.escalated && (
+                      <div className="mt-5 rounded-xl bg-amber-50 p-4">
+                        <p className="text-sm font-semibold text-amber-950">
+                          Human support
+                        </p>
+
+                        <div className="mt-3 space-y-2 text-sm text-amber-900">
+                          <p>
+                            <span className="font-medium">Status:</span>{" "}
+                            {chatResponse.state}
+                          </p>
+
+                          <p>
+                           <span className="font-medium">Escalated:</span>{" "}
+                           {chatResponse.escalated ? "true" : "false"}
+                          </p>
+
+                          {chatResponse.ticket_id && (
+                            <p>
+                              <span className="font-medium">Ticket ID:</span>{" "}
+                              {chatResponse.ticket_id}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
