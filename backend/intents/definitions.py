@@ -59,6 +59,7 @@ INTENT_KEYWORDS: Dict[Intent, List[str]] = {
         "has my order shipped",
         "has it shipped",
         "shipping status",
+         "shipping info", 
         "delivery status",
         "delivery date",
         "package status",

@@ -8,8 +8,8 @@ from backend.intents.definitions import Intent, ConversationState
 
 # Service imports
 from backend.services.order_service import get_order_status
-from backend.services.returns_service import initiate_return
-from backend.services.refund_service import get_refund_status
+from backend.services.refunds import get_refund_status 
+from backend.services.returns import initiate_return
 from backend.services.fallback import handle_unmatched_query
 from backend.services.escalation import escalate_to_human
 from backend.services.ticketing import create_ticket
