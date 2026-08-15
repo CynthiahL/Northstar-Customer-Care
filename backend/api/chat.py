@@ -159,36 +159,39 @@ def chat(request: ChatRequest) -> ChatResponse:
             session_state=current_state
         )
 
-    # 3. Initiate Returns Intent
+        # 3. Initiate Returns Intent inside backend/api/chat.py
     if intent == Intent.INITIATE_RETURN:
         if not order_id:
             return request_order_id(intent, "Please provide your order number so I can check return eligibility.", current_state)
         
-        result = initiate_return(order_id)
+        msg = initiate_return(order_id)
+        
         return ChatResponse(
             intent=intent,
-            state=ConversationState.PROGRESS,
-            message=getattr(result, "message", str(result)),
+            state=ConversationState.PROCESSING, 
+            message=msg,
             order_id=order_id,
             session_state=current_state
         )
 
-    # 4. Get Refund Status Intent
+
+      # 4. Get Refund Status Intent inside backend/api/chat.py
     if intent == Intent.GET_REFUND_STATUS:
         if not order_id:
             return request_order_id(intent, "Please provide your order number so I can check refund status.", current_state)
         
-        result = get_refund_status(order_id)
+        msg = get_refund_status(order_id)
+        
         return ChatResponse(
             intent=intent,
-            state=ConversationState.PROGRESS,
-            message=getattr(result, "message", str(result)),
+            state=ConversationState.PROCESSING, 
+            message=msg,
             order_id=order_id,
             session_state=current_state
         )
 
+
     # 5. Fallback Route
-        # 5. Fallback Route (at the bottom of your file)
     return handle_unmatched_query(
         customer_id=order_id or "anonymous_user",
         message=request.message
