@@ -6,6 +6,7 @@ import {
   sendChatMessage,
   type ChatResponse,
 } from "../lib/api";
+import ChatConversation from "../components/chat/ChatConversations";
 
 type Intent = "order" | "returns" | "other" | null;
 
@@ -19,12 +20,6 @@ type ReturnsOption =
 export default function Home() {
   const [selectedIntent, setSelectedIntent] = useState<Intent>(null);
   const [returnsOption, setReturnsOption] = useState<ReturnsOption>(null);
-  const [message, setMessage] = useState("");
-
-  const [chatResponse, setChatResponse] = useState<ChatResponse | null>(null);
-  const [isSending, setIsSending] = useState(false);
-  const [chatError, setChatError] = useState<string | null>(null);
-
   const [refundOrderId, setRefundOrderId] = useState("");
   const [refundResponse, setRefundResponse] =
   useState<ChatResponse | null>(null);
@@ -80,40 +75,6 @@ export default function Home() {
       setRefundLoading(false);
     }
   }
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const trimmedMessage = message.trim();
-
-    if (!trimmedMessage || isSending) {
-      return;
-    }
-
-    setIsSending(true);
-    setChatError(null);
-    setChatResponse(null);
-
-    try {
-      const response = await sendChatMessage({
-        message: trimmedMessage,
-        state: "new",
-      });
-
-      setChatResponse(response);
-      setMessage("");
-    } catch (error) {
-      console.error("Chat request failed:", error);
-
-      setChatError(
-        error instanceof Error
-          ? error.message
-          : "Unable to contact customer support.",
-      );
-    } finally {
-      setIsSending(false);
-    }
-  }
-
   return (
     <main className="min-h-screen bg-[var(--background)]">
       <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-6 sm:px-6 lg:px-8">
@@ -548,87 +509,8 @@ export default function Home() {
               </div>
             )}
 
-            {/* Free text input on main screen */}
-            {!selectedIntent && (
-              <div className="mt-8">
-                <p className="mb-3 text-sm font-medium text-[var(--foreground)]">
-                  Or type your question
-                </p>
-
-                <form onSubmit={handleSubmit}>
-                  <div className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-white p-2 shadow-sm focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-50">
-                    <input
-                      type="text"
-                      value={message}
-                      onChange={(event) => setMessage(event.target.value)}
-                      placeholder="e.g. Where is my order?"
-                      aria-label="Type your support question"
-                      className="min-w-0 flex-1 bg-transparent px-3 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-gray-400"
-                    />
-
-                    <button
-                      type="submit"
-                      disabled={!message.trim()}
-                      className="rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--primary-dark)] disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      Send
-                    </button>
-                  </div>
-                </form>
-                {isSending && (
-                  <p className="mt-3 text-sm text-[var(--muted)]">
-                    Checking with Northstar Support...
-                  </p>
-                )}
-
-                {chatError && (
-                  <div className="mt-4 rounded-2xl border border-red-100 bg-red-50 p-4">
-                    <p className="text-sm leading-6 text-red-900">
-                      {chatError}
-                    </p>
-                  </div>
-                )}
-
-                {chatResponse && (
-                  <div className="mt-4 rounded-2xl border border-[var(--border)] bg-white p-5 shadow-sm">
-                    <p className="text-xs font-medium uppercase tracking-wide text-[var(--muted)]">
-                      Northstar Support
-                    </p>
-
-                    <p className="mt-2 text-sm leading-7 text-[var(--foreground)]">
-                      {chatResponse.message}
-                    </p>
-
-                    {chatResponse.escalated && (
-                      <div className="mt-5 rounded-xl bg-amber-50 p-4">
-                        <p className="text-sm font-semibold text-amber-950">
-                          Human support
-                        </p>
-
-                        <div className="mt-3 space-y-2 text-sm text-amber-900">
-                          <p>
-                            <span className="font-medium">Status:</span>{" "}
-                            {chatResponse.state}
-                          </p>
-
-                          <p>
-                           <span className="font-medium">Escalated:</span>{" "}
-                           {chatResponse.escalated ? "true" : "false"}
-                          </p>
-
-                          {chatResponse.ticket_id && (
-                            <p>
-                              <span className="font-medium">Ticket ID:</span>{" "}
-                              {chatResponse.ticket_id}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+            {/* Conversation chat */}
+            {!selectedIntent && <ChatConversation />}
           </div>
         </section>
 
