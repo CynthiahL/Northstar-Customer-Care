@@ -10,8 +10,8 @@ from backend.intents.definitions import Intent, ConversationState
 from backend.services.order_service import get_order_status
 from backend.services.returns_service import initiate_return
 from backend.services.refund_service import get_refund_status
-from backend.services.escalation_service import escalate_to_human
-from backend.services.fallback_service import get_fallback_response
+from backend.services.fallback import handle_unmatched_query
+from backend.services.escalation import escalate_to_human
 
 
 router = APIRouter(
